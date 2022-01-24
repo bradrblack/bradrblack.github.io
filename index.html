@@ -4,14 +4,13 @@
   <meta charset="utf-8">
 	<meta content='width=device-width' name='viewport'>
   <meta name="theme-color" content="#222222">
-  <link rel="shortcut icon" href="favicon.png"> 
+ <link rel="stylesheet" href="style.css">
 	<title>Install Pixel Gadget</title>
 <script
   type="module"
   src="https://unpkg.com/esp-web-tools@7.0.0/dist/web/install-button.js?module"
 ></script>
-<!--
-	<style>
+<!--	<style>
 		body {
 			font-family: Verdana, Helvetica, sans-serif;
 			text-align: center;
@@ -120,11 +119,12 @@
 	</style>
 --!>
 </head>
-<body onload="checkSupported()">
+<body onload="checkSupported()" align="center">
+<header>
 <a><img alt="" src="./neo.png" width="253" height="185"></a>
 <div class="main">
-<h2>Welcome to the Pixel Gadget web installer!</h2>
-
+<h1>Welcome to the Pixel Gadget web installer!</h1>
+</header>
 <div id="flasher">
 
 <ol>
