@@ -118,22 +118,29 @@
     }
 	</style>
 --!>
+<style>
+    ol {
+      margin: auto;
+      text-align: left;
+      display: inline-block;
+    }
+</style>
 </head>
 <body onload="checkSupported()" align="center">
-<header>
+<header align="center">
 <a><img alt="" src="./neo.png" width="253" height="185"></a>
 <div class="main">
-<h1>Welcome to the Pixel Gadget web installer!</h1>
+<h1>Pixel Gadget Web Installer</h1>
 </header>
 <div id="flasher">
-
+<div  margin="auto" text-align="left" display="inline-block">
 <ol>
   <li>Plug in your Pixel Gadget into a USB port. 
   <li>Choose which software version you want.
   <li id="coms">Hit "Install" and select the correct COM port. <a onclick="showSerialHelp()">No device found?</a></li>
   <li>Get Pixel Gadget updated in less than 3 minutes!</li>
 </ol><br><br>
-
+</div>
 <div class="container inst-button">
  <!-- add new builds here -->
   <select id="ver" class="btn" onchange="setManifest()">
