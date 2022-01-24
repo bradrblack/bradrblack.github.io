@@ -1,0 +1,12 @@
+{
+  "name": "Pixel Gadget",
+  "version": "2021.12.31",
+  "builds": [
+    {
+      "chipFamily": "ESP8266",
+      "parts": [
+        { "path": "esp8266.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
