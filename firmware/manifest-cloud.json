@@ -1,0 +1,12 @@
+{
+  "name": "Pixel Gadget Cloud",
+  "version": "2022.01.31",
+  "builds": [
+    {
+      "chipFamily": "ESP8266",
+      "parts": [
+        { "path": "cloud.bin", "offset": 0 }
+      ]
+    }
+  ]
+}
