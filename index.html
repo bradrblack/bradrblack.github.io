@@ -143,6 +143,12 @@
 </ol><br><br>
 </div>
 <div class="container inst-button">
+   <esp-web-install-button
+    id="inst"
+    manifest="firmware/manifest-cloud.json"
+  >
+    <button class="btn" slot="activate">Install</button>
+  </esp-web-install-button><br>
  <!-- add new builds here -->
   <select id="ver" class="btn" onchange="setManifest()">
     <optgroup label="Cloud with Clock and IOT Integration (BETA)">
@@ -154,13 +160,6 @@
         >Pixel Gadget 2021.12.31</option>
     </optgroup>
   </select><br><br>
-   <esp-web-install-button
-    id="inst"
-    manifest="firmware/manifest-cloud.json"
-  >
-
-    <button class="btn" slot="activate">Install</button>
-  </esp-web-install-button><br>
   
 </div>
 
