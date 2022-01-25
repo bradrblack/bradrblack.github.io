@@ -11,114 +11,6 @@
   type="module"
   src="https://unpkg.com/esp-web-tools@7.0.0/dist/web/install-button.js?module"
 ></script>
-<!--	<style>
-		body {
-			font-family: Verdana, Helvetica, sans-serif;
-			text-align: center;
-			background-color: #222;
-			margin: 0;
-      color: #fff;
-		}
-    
-    select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='white'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
-      background-size: 12px;
-      background-position: 206px 17px;
-      padding-left: 12px !important;
-      background-repeat: no-repeat;
-      outline: none;
-    }
-    select:-moz-focusring {
-      transition-duration: 0s;
-      color: transparent;
-      text-shadow: 0 0 0 #fff;
-    }
-    option {
-      background-color: var(--c-3);
-      color: var(--c-f);
-    }
-    
-    .btn {
-      outline: none;
-      cursor: pointer;
-      padding: 8px;
-      margin: 10px;
-      width: 230px;
-      font-family: Verdana, Helvetica, sans-serif;
-      font-size: 19px;
-      background-color: #333;
-      color: white;
-      border: 0px solid white;
-      border-radius: 25px;
-    }
-   /* 
-    img {
-      width: 770px;
-      max-width: 80%;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-      margin: 3vh 0 5px 0;
-      animation: fi 1s;
-    }
-   */ 
-    @keyframes fi {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-    }
-   /* 
-    .main {
-      animation: fi 1.5s .7s both;
-    }
-   */ 
-    a {
-      color: #fff;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    
-    ol {
-      margin: auto;
-      text-align: left;
-      display: inline-block;
-    }
-    
-    li::marker {
-      text-decoration: bold;
-      color: #09f;
-    }
-    
-    li {
-      margin: 5px;
-    }
-/*    
-    .container {
-      width: 80%;
-      max-width: 510px;
-      margin: auto;
-      border-radius: 5px;
-      box-sizing: border-box;
-      background-color: #222;
-      overflow: hidden;
-    }
- */   
-    .inst-button {
-      padding: 5px 0;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      ewt-install-dialog {
-        /*--mdc-theme-primary: #ffa000; /*buttons*/
-        --mdc-theme-surface: #333;
-        --mdc-dialog-heading-ink-color: #fff;
-        --mdc-dialog-content-ink-color: #ddd;
-        --mdc-text-field-fill-color: #ddd;
-      }
-    }
-	</style>
---!>
 <style>
     ol {
       margin: auto;
@@ -138,29 +30,25 @@
 <ol>
   <li>Plug your Pixel Gadget into a USB port. 
   <li>Choose which software version you want.
-  <li id="coms">Hit "Install" and select the correct COM port. <a onclick="showSerialHelp()">No device found?</a></li>
+  <li id="coms">Select the correct COM port. <a onclick="showSerialHelp()">No device found?</a></li>
   <li>Get Pixel Gadget updated in less than 3 minutes!</li>
 </ol><br><br>
 </div>
 <div class="container inst-button">
    <esp-web-install-button
     id="inst"
+    manifest="firmware/manifest.json"
+     >
+    <button class="btn" slot="activate">Restore Factory Non-Cloud Version</button>
+  </esp-web-install-button>
+<br><br>
+   <esp-web-install-button
+    id="inst"
     manifest="firmware/manifest-cloud.json"
-  >
-    <button class="btn" slot="activate">Install</button>
+     >
+    <button class="btn" slot="activate">Install Pixel Gadget Cloud Version (BETA)</button>
   </esp-web-install-button><br>
- <!-- add new builds here -->
-  <select id="ver" class="btn" onchange="setManifest()">
-    <optgroup label="Cloud with Clock and IOT Integration (BETA)">
-      <option data-manifest="firmware/manifest-cloud.json"
-        >Pixel Gadget Cloud 2022.01.31 (BETA)</option>
-    </optgroup>
-    <optgroup label="No Cloud - Factory 2021 Version">
-      <option data-manifest="firmware/manifest.json"
-        >Pixel Gadget 2021.12.31</option>
-    </optgroup>
-  </select><br><br>
-  
+
 </div>
 
 </div>
@@ -191,9 +79,7 @@
   
   function showSerialHelp() {
     document.getElementById('coms').innerHTML = `Hit "Install" and select the correct COM port.<br><br>
-    You might be missing the drivers for your board.<br>
-    Here are drivers for chips commonly used in ESP boards:<br>
-    <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank">CP2102 (square chip)</a><br>
+    You might be missing the drivers for your Pixel Gadget.<br>
     <a href="https://github.com/nodemcu/nodemcu-devkit/tree/master/Drivers" target="_blank">CH34x (rectangular chip)</a><br><br>
     Make sure your USB cable supports data transfer.<br><br>
     `;
