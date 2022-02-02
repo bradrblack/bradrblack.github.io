@@ -1,16 +1,11 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
 	<meta content='width=device-width' name='viewport'>
   <meta name="theme-color" content="#222222">
- <link rel="stylesheet" href="style.css">
-	<title>Install Pixel Gadget</title>
-<script
-  type="module"
-  src="https://unpkg.com/esp-web-tools@7.0.0/dist/web/install-button.js?module"
-></script>
+<link rel="stylesheet" href="style.css">
+	<title>Pixel Gadget Cloud</title>
 <style>
     ol {
       margin: auto;
@@ -32,76 +27,53 @@
     }
 </style>
 </head>
-<body onload="checkSupported()" align="center">
-<header align="center">
+<header align="center" text-align="center">
 <a><img alt="" src="./neo.png" width="253" height="185"></a>
-<div class="main">
-<h1>Pixel Gadget Web Installer</h1>
+<h1 text-align="center">Pixel Gadget Cloud</h1>
 </header>
-<div id="flasher">
-<div  margin="auto" text-align="left" display="inline-block">
+<body align="center" margin"auto">
+<h2>Intro</h2>
+<p>The first <a href="https://github.com/bradrblack/pixel-gadget"> Pixel Gadget</a> was created in December 2021 and was a stand-alone, non-network-connected gadget that cycles through mesmerizing patterns on a bright 8x8 NeoPixel matrix.  </p><h3>Pixel Gadget Cloud is a software updated version that provides a few cool new features...</h3>
 <ol>
-  <li>Plug your Pixel Gadget into a USB port. 
-  <li>Choose which software version you want.
-  <li id="coms">Select the correct COM port. <a onclick="showSerialHelp()">No device found?</a></li>
-  <li>Get Pixel Gadget updated in less than 3 minutes!</li>
+<li>A clock feature provides accurate time in either a standalone "clock" mode or by showing the time on the hour and half-hour during normal color cycling pattern mode.  Network Time Protocol is used to keep the clock in sync.  In clock mode, the hour digit is shown and the minutes are represented by two cycling pixels that represent the approxmiate minute of the hour.  If you're using voice integration, you can ask Pixel Gadget to display the time and it will show the full time using a scrolling animation!
+<li>An optional ability to connect to a cloud service that can integrate with IFFT (If this then that) enabling voice control with Google Assitant and Amazon Alexa.  Voice control features include:
+<ul>
+<li>Show current time: Hey Google, "gadget time" 
+<li>Change to clock mode:: Hey Google, "gadget clock" 
+<li>Change to next color/pattern: Hey Google, "change"
+<li>Change to a specific color: Hey Google, "red|blue|purple|green|random|christmas"
+<li>Change the intensity: Hey Google, "high|low"
+<li>Save the current color/intensity for startup: Hey Google, "save"
+<li>Restart: Hey Google, "reset|restart|reboot"
+</ul>
+<li>A setup utility on first start and reset to allow configuration such as the WiFi network, Cloud integration account info and setting the time zone.  You can now long press on the button for over 10 seconds to reset all of this config info.  Hold down the button until you see the screen clear and light up again.
 </ol><br><br>
+<h2>Installing Pixel Gadget Cloud</h2>
+<p>To install Pixel Gadget Cloud use a browser such as Google Chrome or Microsoft Edge and follow the instructions on this page: <a href="https://bradrblack.github.io/install.html"> https://bradrblack.github.io/install.html</a>
+<h2>Configuring Pixel Gadget Cloud</h2>
+<p>Follow these simple steps to configure Pixel Gadget Cloud...
+<ol>
+<li>Connect to the Pixel Gadget Cloud WiFI...
+<ul>
+<li> Once you've installed the software update, you'll see a series of "bars" indicating that Pixel Gadget Cloud is waiting for your to connect to it via WifI to set it up.  If you wait a few minutes, it will time-out and work like a non-network connected Pixel Gadget.  To restart the setup process, disconnect and reconnect power or hold down the button until a full reset occurs and you see the screen fill with color.
+</ul>
+<li>Connect to the Pixel Gadget Cloud "captive portal"
+<ul>
+<li> In most cases, you'll see a browser window open to the setup page after a few seconds.  If not, just browse to <a href="http://192.168.4.1">http://192.168.4.1</a> to get to the configuration page.
+</ul>
+<li>Setup WiFI and other things
+<ul>
+<li> Click on the Configure WiFi button.
+<li> You should see a set of nearby wireless networks listed at the top of the page.  Click on one to select it and enter the password.
+<li> You can skip the Adafruit IO username and key if you don't need any voice control.  If you want to use these features, you can create a free account at <a href="https://io.adafruit.com/">https://io.adafruit.com/</a> and follow the instructions at <a href="https://bradrblack.github.io/cloud.html">https://bradrblack.gihub.io/cloud.html</a> to get setup.
+<li> Make sure to select your timezone from the list!
+<li> Click "Save"
+</ul>
+<br>
+CONGRATS!! You should now be able to enjoy the features of Pixel Gadget Cloud!
+</p>
 </div>
-<div class="container inst-button">
-   <esp-web-install-button
-    id="inst"
-    manifest="firmware/manifest.json"
-     >
-    <button class="btn" slot="activate">Restore Factory Non-Cloud Version</button>
-  </esp-web-install-button>
-<br><br>
-   <esp-web-install-button
-    id="inst"
-    manifest="firmware/manifest-cloud.json"
-     >
-    <button class="btn" slot="activate">Install Pixel Gadget Cloud Version (BETA)</button>
-  </esp-web-install-button><br>
-
 </div>
-
-</div>
-<br><h5>Powered by <a href="https://esphome.github.io/esp-web-tools/" target="_blank">ESP Web Tools</a></h5>
-
-<script>  
-  function setManifest() {
-    var sel = document.getElementById('ver');
-    var opt = sel.options[sel.selectedIndex];
-    var m = opt.dataset.manifest;
-    var me = opt.dataset.ethernet;
-    document.getElementById('eth').style.display = me ? "block":"none";
-    if (me && document.getElementById('ethernet').checked) {
-      m = me;
-    }
-    document.getElementById('inst').setAttribute('manifest',m);
-    document.getElementById('verstr').textContent = opt.text;
-  }
-  
-  function checkSupported() {
-    if (document.getElementById('inst').hasAttribute('install-unsupported')) unsupported();
-    else setManifest();
-  }
-  
-  function unsupported() {
-    document.getElementById('flasher').innerHTML = "Sorry, your browser is not yet supported!<br>Please try on Desktop Chrome or Edge.<br>"
-  }
-  
-  function showSerialHelp() {
-    document.getElementById('coms').innerHTML = `Hit "Install" and select the correct COM port.<br><br>
-    You might be missing the drivers for your Pixel Gadget.<br>
-    <a href="http://www.wch-ic.com/downloads/CH341SER_ZIP.html" target="_blank">CH34x Driver from Vendor site WCH</a><br><br>
-    Make sure your USB cable supports data transfer.<br><br>
-    `;
-  }
-
-  function webToolsTableColorHack() {
-
-  }
-</script>
 </body>
 </html>
 

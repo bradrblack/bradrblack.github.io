@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta content='width=device-width' name='viewport'>
+  <meta name="theme-color" content="#222222">
+ <link rel="stylesheet" href="style.css">
+	<title>Install Pixel Gadget</title>
+<script
+  type="module"
+  src="https://unpkg.com/esp-web-tools@7.0.0/dist/web/install-button.js?module"
+></script>
+<style>
+    ol {
+      margin: auto;
+      text-align: left;
+      display: inline-block;
+    }
+    .btn {
+      outline: none;
+      cursor: pointer;
+      padding: 8px;
+      margin: 10px;
+      width: 400px;
+      font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console";
+      font-size: 14px;
+      background-color: #333;
+      color: white;
+      border: 0px solid white;
+      border-radius: 25px;
+    }
+</style>
+</head>
+<body onload="checkSupported()" align="center">
+<header align="center">
+<a><img alt="" src="./neo.png" width="253" height="185"></a>
+<div class="main">
+<h1>Pixel Gadget Web Installer</h1>
+</header>
+<div id="flasher">
+<div  margin="auto" text-align="left" display="inline-block">
+<ol>
+  <li>Plug your Pixel Gadget into a USB port. 
+  <li>Choose which software version you want.
+  <li id="coms">Select the correct COM port. <a onclick="showSerialHelp()">No device found?</a></li>
+  <li>Get Pixel Gadget updated in less than 3 minutes!</li>
+</ol><br><br>
+</div>
+<div class="container inst-button">
+   <esp-web-install-button
+    id="inst"
+    manifest="firmware/manifest.json"
+     >
+    <button class="btn" slot="activate">Restore Factory Non-Cloud Version</button>
+  </esp-web-install-button>
+<br><br>
+   <esp-web-install-button
+    id="inst"
+    manifest="firmware/manifest-cloud.json"
+     >
+    <button class="btn" slot="activate">Install Pixel Gadget Cloud Version (BETA)</button>
+  </esp-web-install-button><br>
+
+</div>
+
+</div>
+<br><h5>Powered by <a href="https://esphome.github.io/esp-web-tools/" target="_blank">ESP Web Tools</a></h5>
+
+<script>  
+  function setManifest() {
+    var sel = document.getElementById('ver');
+    var opt = sel.options[sel.selectedIndex];
+    var m = opt.dataset.manifest;
+    var me = opt.dataset.ethernet;
+    document.getElementById('eth').style.display = me ? "block":"none";
+    if (me && document.getElementById('ethernet').checked) {
+      m = me;
+    }
+    document.getElementById('inst').setAttribute('manifest',m);
+    document.getElementById('verstr').textContent = opt.text;
+  }
+  
+  function checkSupported() {
+    if (document.getElementById('inst').hasAttribute('install-unsupported')) unsupported();
+    else setManifest();
+  }
+  
+  function unsupported() {
+    document.getElementById('flasher').innerHTML = "Sorry, your browser is not yet supported!<br>Please try on Desktop Chrome or Edge.<br>"
+  }
+  
+  function showSerialHelp() {
+    document.getElementById('coms').innerHTML = `Hit "Install" and select the correct COM port.<br><br>
+    You might be missing the drivers for your Pixel Gadget.<br>
+    <a href="http://www.wch-ic.com/downloads/CH341SER_ZIP.html" target="_blank">CH34x Driver from Vendor site WCH</a><br><br>
+    Make sure your USB cable supports data transfer.<br><br>
+    `;
+  }
+
+  function webToolsTableColorHack() {
+
+  }
+</script>
+</body>
+</html>
+
