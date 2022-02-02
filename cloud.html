@@ -35,11 +35,11 @@
 <h2>How to use Adafruit IO, IFTT and Voice Assistants</h2>
 <p>Welcome to the wild world of "Internet of Things"!  A while back I wondered if it would be possible to tie Pixel Gadget into the voice control world of Google Assitant and Amazon Alexa.  I know you could do that if you were part of "Big Smart Lightbulb" but what about a tiny maker with a soldering iron and a table saw?  Well, it turns out that it can be done.  hold on to your coffees folks, here we go!
 <h3>Concepts</h3>
-<p>Many existing IOT devices use something call MQTT which is a messaging protocol supporting a "publish and subscribe" mechanism.  Pixel Gadget is going to connect to an MQTT service/broker and subscribe to a "feed" which will provide commands.  The MQTT service used is from Adafruit IO - this is a free service for low-volume usage and was created by a company called Adafruit that sells a bunch of stuff for learning electronics.   Once Pixel Gadget is connected to Adafruit IO, you can enter commands directly from that site or create apps that use APIs and SDKs to send commands.  You can even create a command line "script" to send commands.<br><br>In order to make the connection to Google or Alexa voice control, we need to use another free service, "If This Then That" or IFTT.   IFTT allows you to create a few free "Applets" and is able to take triggers from dozens of products and services and send actions to others.  What we want here is "If Google or Alexa" get a voice command, send a command to a specific Adafruit IO MQTT Feed which will then be forwarded on to our gadget.  Simple.</p>
+<p>Many existing IOT devices use something call MQTT which is a messaging protocol supporting a "publish and subscribe" mechanism.  Pixel Gadget is going to connect to an MQTT service/broker and subscribe to a "feed" which will provide commands.  The MQTT service used is from Adafruit IO - this is a free service for low-volume usage and was created by a company called Adafruit that sells a bunch of stuff for learning electronics.   Once Pixel Gadget is connected to Adafruit IO, you can enter commands directly from that site or create apps that use APIs and SDKs to send commands.  You can even create a command line script to send commands.<br><br>In order to make the connection to Google or Alexa voice control, we need to use another free service, "If This Then That" or IFTT.   IFTT allows you to create a few free "Applets" and is able to take triggers from dozens of products and services and send actions to others.  What we want here is "If Google or Alexa" get a voice command, send a command to a specific Adafruit IO MQTT Feed which will then be forwarded on to our gadget.  Simple.</p>
 <h3>Step 1: Create an Adafruit IO Account and a "Feed" to control Pixel Gadget</h3>
 <ol>
-<li>Head on over to <a href="https://io.adafruit.com">io.adafruit.com</a> and scroll down to "Get Started for FREE". For privacy reasons, I've created a separate email identify for all of my IOT things including Google Assistant, Adadruit IO and IFTT but you do you.
-<li>Once you have created your account login and create the feed we need: under the "Feeds" menu select "+ New Feed" and use the name to "pixelgadgetcloud".  You must use this exact feed name.
+<li>Head on over to <a href="https://io.adafruit.com">io.adafruit.com</a> and scroll down to "Get Started for FREE". For privacy reasons, I created a separate email identify for all of my IOT things including Google Assistant, Adadruit IO and IFTT, but you do you.
+<li>Once you have created your account, login and create the feed we need: under the "Feeds" menu select "+ New Feed" and use the name to "pixelgadgetcloud".  <u>You must use this exact feed name.</u>
 </ol>
 </p>
 <h3>Step 2: Create an IFTT account and an Applet to Connect Your Voice Assistant to Adafruit IO</h3>
@@ -58,7 +58,7 @@
 <li>Under "Data to Save" select "Add ingredient" and "TextField"
 <li>Select "Create Action", "Continue" and "Finish"
 </ol><br><br>
-These instruction have been for Google Assistant but Alexa is very similar but not as flexible. You'll need to create new Applets for the commands that you want to use since Alex integration on IFTT does not support a text ingredient.  I create an Applet like: If You say "Alexa trigger gadget time", then Send data to Pixel Gadget Cloud feed with an action using "time" as the datea to save to Adafruit IO.
+These instruction have been for Google Assistant -- Alexa is very similar but not as flexible. You'll need to create new Applets for each of the commands that you want to use since Alex integration on IFTT does not support a text ingredient.  I create an Applet like: If You say "Alexa trigger gadget time", then Send data to Pixel Gadget Cloud feed with an action using "time" as the datea to save to Adafruit IO.
 </p>
 <h3>Step 3: Configure or Re-Configure Your Pixel Gadget with your Adafruit IO Username and Key</h3>
 <p>
@@ -77,7 +77,7 @@ These instruction have been for Google Assistant but Alexa is very similar but n
 <li>Save the current color/intensity for startup: Hey Google, "gadget save"
 <li>Restart: Hey Google, "gadget reset|restart|reboot"
 </ul>
-If it is not working, first check the feed activity on Adafruit IO.  You should see commands coming in.  You must get the username and key correct - if you see a cylcling square on the gadget startup for more than a few seconds, the Adafruit IO login could be failing and you'll need to restart and re-enter the username and key.  Still not working?  Contact your beta coordinator for help.
+If it is not working, first check the feed activity on Adafruit IO.  You should see commands coming in.  You must get the username and key correct on the device -- if you see a cylcling square on the gadget startup for more than a few seconds, the Adafruit IO login could be failing and you'll need to restart and re-enter the username and key.  Still not working?  Contact your beta coordinator for help.
 </p>
 </ol><br><br>
 <h3>CONGRATS!! You are now be able to enjoy the features of Pixel Gadget Cloud with your voice assistant!</h3>
