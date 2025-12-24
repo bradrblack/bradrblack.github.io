@@ -1,77 +1,207 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-	<meta content='width=device-width' name='viewport'>
-  <meta name="theme-color" content="#222222">
-<link rel="stylesheet" href="style.css">
-	<title>Pixel Gadget Cloud</title>
-<style>
-    ol {
-      margin: 0 0px 50px 50px;
-      text-align: left;
-    }
-    .btn {
-      outline: none;
-      cursor: pointer;
-      padding: 8px;
-      margin: 10px;
-      width: 400px;
-      font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console";
-      font-size: 14px;
-      background-color: #333;
-      color: white;
-      border: 0px solid white;
-      border-radius: 25px;
-    }
-</style>
+    <meta charset="utf-8">
+    <title>Bradster Terminal</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <style>
+        html, body {
+            position: relative;
+            height: 100%;
+            background: #000;
+            margin: 0;
+            padding: 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 16px;
+            color: #0F0;
+            overflow: auto;
+        }
+        
+        #c {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        #terminal-wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        #start-button {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #0f0;
+            transition: all 0.3s;
+            display: none;
+        }
+        
+        #start-button:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            transform: scale(1.05);
+        }
+        
+        #terminal {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            min-height: 500px;
+            border: 1px solid #0f0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #login-box {
+            text-align: left;
+            white-space: pre;
+            background-color: transparent;
+        }
+        
+        #terminal-content {
+            display: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+        
+        input {
+            background-color: #000;
+            border: none;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            outline: none;
+            width: 200px;
+        }
+        
+        input[type="password"] {
+            background-color: #000;
+        }
+        
+        #command-input {
+            background-color: transparent;
+            border: none;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            outline: none;
+            width: calc(100% - 50px);
+        }
+        
+        .command-line {
+            display: flex;
+        }
+        
+        .prompt {
+            color: #0f0;
+        }
+        
+        .prompt-user {
+            color: #ff0;
+        }
+        
+        .prompt-at {
+            color: #fff;
+        }
+        
+        .prompt-host {
+            color: #a0a;
+        }
+        
+        .prompt-dir {
+            color: #0ff;
+        }
+        
+        .prompt-symbol {
+            color: #0f0;
+        }
+    </style>
 </head>
-<header align="center" text-align="center">
-<a><img alt="" src="./neo.png" width="253" height="185"></a>
-<h1 text-align="center">Pixel Gadget Cloud</h1>
-</header>
-<body align="center">
-<h2>Intro</h2>
-<p>The first <a href="https://github.com/bradrblack/pixel-gadget"> Pixel Gadget</a> was created in December 2021 and is a stand-alone, non-network-connected gadget that cycles through mesmerizing patterns on a bright 8x8 NeoPixel matrix.  </p><h3>Pixel Gadget Cloud is a software updated version that provides a few cool new features...</h3>
-<ol>
-<li>A clock feature provides accurate time in either a standalone "clock" mode or by showing the time on the hour and half-hour during normal color cycling pattern mode.  Network Time Protocol is used to keep the clock in sync.  In clock mode, the hour digit is shown and the minutes are represented by two cycling pixels that represent the approximate minute of the hour.  If you're using voice integration, you can ask Pixel Gadget to display the time and it will show the full time using a scrolling animation.  Clock mode can also be selected by the rotary encoder knob directly as one of the modes.
-<li>An optional ability to connect to a cloud service that can integrate with IFFT (If this then that) enabling voice control with Google Assistant and Amazon Alexa.  Voice control features include:
-<ul>
-<li>Show current time: Hey Google, "gadget time" 
-<li>Change to clock mode: Hey Google, "gadget clock" 
-<li>Change to next color/pattern: Hey Google, "gadget change"
-<li>Change to a specific color: Hey Google, "gadget red|blue|purple|green|random|christmas"
-<li>Change the intensity: Hey Google, "gadget high|low"
-<li>Save the current color/intensity for startup: Hey Google, "gadget save"
-<li>Restart: Hey Google, "gadget reset|restart|reboot"
-<li>Display a message: Hey Google, "gadget message hello world"
-</ul>
-<li>A setup utility on first start and reset to allow configuration such as the WiFi network, Cloud integration account info and setting the time zone.  You can now long press on the button for over 10 seconds to reset all of this config info.  Hold down the button until you see the screen clear and light up again.
-</ol>
-<h2>Installing Pixel Gadget Cloud</h2>
-<p>To install Pixel Gadget Cloud use a browser such as Google Chrome or Microsoft Edge and follow the instructions on this page: <a href="https://bradrblack.github.io/install.html"> https://bradrblack.github.io/install.html</a>
-<h2>Configuring Pixel Gadget Cloud</h2>
-<p>Follow these simple steps to configure Pixel Gadget Cloud...
-<ol>
-<li>Connect to the Pixel Gadget Cloud WiFi...
-<ul>
-<li> Once you've installed the software update, you'll see a series of "bars" indicating that Pixel Gadget Cloud is waiting for your to connect to it via WifI to set it up.  On your PC/Mac/phone/tablet change the wifi settings to connect to the "Pixel Gadget Cloud" wireless network.  If you wait a few minutes, it will time-out and work like a non-network connected Pixel Gadget.  To restart the setup process, disconnect and reconnect power or hold down the button until a full reset occurs and you see the screen fill with color.
-</ul>
-<li>Connect to the Pixel Gadget Cloud "captive portal"
-<ul>
-<li> In most cases, you'll see a browser window automatically open to the setup page after a few seconds.  If not, just browse to <a href="http://192.168.4.1">http://192.168.4.1</a> to get to the configuration page.
-</ul>
-<li>Setup WiFi and other things
-<ul>
-<li> Click on the Configure WiFi button.
-<li> You should see a set of nearby wireless networks listed at the top of the page.  Click on one to select it and enter the password.
-<li> You can skip the Adafruit IO username and key if you don't need any voice control.  If you want to use these features, you can create a free account at <a href="https://io.adafruit.com/">https://io.adafruit.com/</a> and follow the instructions at <a href="https://bradrblack.github.io/cloud.html">https://bradrblack.gihub.io/cloud.html</a> to get setup.
-<li> Make sure to select your timezone from the list!
-<li> Click "Save"
-</ul>
-</ol>
-<h3>CONGRATS!! You are now be able to enjoy the features of Pixel Gadget Cloud!</h3>
-<br><br>
-</p>
+<body>
+    <canvas id="c"></canvas>
+    
+    <div id="terminal-wrapper">
+        <div id="start-button">?</div>
+        
+        <div id="terminal">
+            <div id="login-box">Username: <input type="text" id="username" maxlength="20">
+Password: <input type="password" id="password" maxlength="20">
+            </div>
+            
+            <div id="terminal-content">
+                <div id="output"></div><div class="command-line">
+                    <span class="prompt" id="prompt">user@bradster:~$ </span>
+                    <input type="text" id="command-input" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Matrix Rain Animation -->
+    <script>
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = font_size + "px courier";
+            br = "BRAD";
+            for (var a = 0; a < drops.length; a++) {
+                var b = j[Math.floor(Math.random() * j.length)];
+                if (br.indexOf(b) > -1) {
+                    ctx.fillStyle = 'hsl(' + 360 * Math.random() + ', 50%, 60%)';
+                } else {
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                    ctx.fillStyle = "#0F0";
+                }
+                ctx.fillText(b, a * font_size, drops[a] * font_size);
+
+                if (drops[a] * font_size > c.height && Math.random() > .97) {
+                    drops[a] = 0;
+                }
+                drops[a]++;
+            }
+        }
+
+        var c = document.getElementById("c");
+        ctx = c.getContext("2d");
+
+        c.height = window.innerHeight;
+        c.width = window.innerWidth;
+
+        var j = "BRADSTER01234567890!#墨白锐";
+        j = j.split("");
+
+        for (var font_size = 20, columns = c.width / font_size, drops = [], x = 0; x < columns; x++)
+            drops[x] = 1;
+        setInterval(draw, 50);
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', function() {
+            c.height = window.innerHeight;
+            c.width = window.innerWidth;
+            columns = c.width / font_size;
+            drops = [];
+            for (var x = 0; x < columns; x++)
+                drops[x] = 1;
+        });
+    </script>
+const startButton=document.getElementById("start-button"),terminal=document.getElementById("terminal"),loginBox=document.getElementById("login-box"),terminalContent=document.getElementById("terminal-content"),usernameInput=document.getElementById("username"),passwordInput=document.getElementById("password"),commandInput=document.getElementById("command-input"),output=document.getElementById("output"),promptSpan=document.getElementById("prompt");let currentUser="user",currentDir="~",commandHistory=[],historyIndex=-1,secretMessage="";const fileSystem={"/":["bin","etc","usr","home","var","tmp"],"/bin":["cat","clear","date","echo","exit","fortune","ls","pwd","rot13","uname","uptime","whoami","cd"],"/etc":["passwd","hosts","hostname","fstab","resolv.conf"],"/usr":["bin","lib","share","local"],"/usr/bin":["vim","gcc","python","perl","ruby"],"/home":["root"],"/home/root":["Desktop","Documents","Downloads",".bash_logout",".bashrc",".profile","secret.txt"],"/var":["log","tmp","cache"],"/tmp":[]},fileContents={"/etc/passwd":"root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin\nsys:x:3:3:sys:/dev:/usr/sbin/nologin\nsync:x:4:65534:sync:/bin:/bin/sync\ngames:x:5:60:games:/usr/games:/usr/sbin/nologin\nman:x:6:12:man:/var/cache/man:/usr/sbin/nologin\nlp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin\nmail:x:8:8:mail:/var/mail:/usr/sbin/nologin\nnews:x:9:9:news:/var/spool/news:/usr/sbin/nologin\nwww-data:x:33:33:www-data:/var/www:/usr/sbin/nologin\nbackup:x:34:34:backup:/var/backups:/usr/sbin/nologin\nnobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin","/etc/hosts":"127.0.0.1       localhost\n127.0.1.1       bradster\n::1             localhost ip6-localhost ip6-loopback\nff02::1         ip6-allnodes\nff02::2         ip6-allrouters","/etc/hostname":"bradster","secret.txt":"encrypted"},availableCommands=["cat","clear","date","echo","exit","fortune","ls","pwd","rot13","uname","uptime","whoami","cd"],availableFiles=["secret.txt",".bash_logout",".bashrc",".profile","passwd","hosts","hostname"],availableDirs=["/bin","/etc","/usr","/home","/var","/tmp","Desktop","Documents","Downloads"];function login(){if("root"!==usernameInput.value.trim().toLowerCase())return passwordInput.value="",usernameInput.value="",void usernameInput.focus();currentUser="root",loginBox.style.display="none",terminalContent.style.display="block",output.innerHTML=`Last login: ${(new Date).toString()}\nWelcome to Bradster UNIX System v2.1\n`,updatePrompt(),commandInput.focus()}function updatePrompt(){promptSpan.innerHTML=`<span class="prompt-user">${currentUser}</span><span class="prompt-at">@</span><span class="prompt-host">bradster</span>:<span class="prompt-dir">${currentDir}</span><span class="prompt-symbol">$ </span>`}function rot13(t){return t.replace(/[a-zA-Z]/g,(function(t){return String.fromCharCode((t<="Z"?90:122)>=(t=t.charCodeAt(0)+13)?t:t-26)}))}async function fetchAndDisplaySecret(){try{const t=Math.random().toString(36).substring(7),e=await fetch("https://corsproxy.io/?"+encodeURIComponent("https://api.quotable.io/random")+"&cb="+t,{cache:"no-store"});if(!e.ok)throw new Error("API request failed");const n=await e.json(),o=rot13(`"${n.content}" - ${n.author}`);secretMessage=o,output.innerHTML=output.innerHTML.replace("Loading secret message...",o)}catch(t){const e=['"The only way to do great work is to love what you do." - Steve Jobs','"Innovation distinguishes between a leader and a follower." - Steve Jobs','"Be yourself; everyone else is already taken." - Oscar Wilde','"Two things are infinite: the universe and human stupidity." - Albert Einstein','"In the middle of difficulty lies opportunity." - Albert Einstein','"The future belongs to those who believe in the beauty of their dreams." - Eleanor Roosevelt','"It is during our darkest moments that we must focus to see the light." - Aristotle','"Life is what happens when you are busy making other plans." - John Lennon','"The way to get started is to quit talking and begin doing." - Walt Disney','"Do not go where the path may lead, go instead where there is no path." - Ralph Waldo Emerson'],n=rot13(e[Math.floor(Math.random()*e.length)]);secretMessage=n,output.innerHTML=output.innerHTML.replace("Loading secret message...",n)}}startButton.addEventListener("click",(()=>{startButton.style.display="none",terminal.style.display="block",usernameInput.focus()})),setTimeout((()=>{startButton.style.display="block"}),5e3),usernameInput.addEventListener("keydown",(t=>{"Enter"===t.key&&passwordInput.focus()})),passwordInput.addEventListener("keydown",(t=>{"Enter"===t.key&&login()}));const commands={ls:t=>{const e=t.trim()||currentDir;let n=e;if("~"===e?n="/home/root":"."===e?n="~"===currentDir?"/home/root":currentDir:e.startsWith("/")||(n="~"===currentDir?"/home/root":currentDir),fileSystem[n]){const t=fileSystem[n];let e="total "+4*t.length+"\n";return t.forEach((t=>{const o=void 0!==fileSystem[n+"/"+t],r=o?"drwxr-xr-x":"-rw-r--r--",s=o?"4096":Math.floor(5e3*Math.random())+100;e+=`${r}  2 ${currentUser} users ${s.toString().padStart(4)} Dec 24 10:30 ${t}\n`})),e.trimEnd()}return`ls: cannot access '${t}': No such file or directory`},cd:t=>{if(!t||""===t.trim()||"~"===t.trim())return currentDir="~",updatePrompt(),"";let e=t.trim();if(".."===e){if("~"===currentDir)currentDir="/home";else{if("/"===currentDir)return"";{const t=currentDir.split("/").filter((t=>t));t.pop(),currentDir=0===t.length?"/":"/"+t.join("/")}}return updatePrompt(),""}if(e.startsWith("/")){if(fileSystem[e])return currentDir=e,updatePrompt(),""}else{const t="~"===currentDir?"/home/root":currentDir,n="/"===t?"/"+e:t+"/"+e;if(fileSystem[n])return currentDir=n,updatePrompt(),""}return`bash: cd: ${t}: No such file or directory`},pwd:()=>"~"===currentDir?"/home/root":currentDir,whoami:()=>currentUser,date:()=>(new Date).toString(),uptime:()=>{const t=Math.floor(100*Math.random())+1,e=Math.floor(24*Math.random()),n=Math.floor(60*Math.random());return` ${(new Date).toTimeString().split(" ")[0]} up ${t} days, ${e}:${n}, 3 users, load average: 0.${Math.floor(90*Math.random())}, 0.${Math.floor(90*Math.random())}, 0.${Math.floor(90*Math.random())}`},uname:()=>"Linux bradster 5.15.0-92-generic #102-Ubuntu SMP x86_64 GNU/Linux",cat:t=>{if(!t||""===t.trim())return"cat: missing file operand\nTry 'cat --help' for more information.";let e=t.trim();if("secret.txt"===e||"/home/root/secret.txt"===e)return secretMessage="",setTimeout((()=>fetchAndDisplaySecret()),100),"Loading secret message...";if(fileContents[e])return fileContents[e];if(!e.startsWith("/")){const t=("~"===currentDir?"/home/root":currentDir)+"/"+e;if(fileContents[t])return fileContents[t];if(fileContents[e])return fileContents[e]}return`cat: ${t}: No such file or directory`},echo:t=>t||"",fortune:()=>{const t=["A computer program does what you tell it to do, not what you want it to do.","The best way to predict the future is to implement it.","There are only 10 types of people: those who understand binary and those who don't.","To err is human, to really foul up requires the root password.","Unix is user-friendly. It's just very selective about who its friends are.","I'd explain it to you, but your kernel wouldn't understand.","Real programmers count from 0."];return t[Math.floor(Math.random()*t.length)]},rot13:t=>t&&""!==t.trim()?"secret.txt"===t.trim()?secretMessage?rot13(secretMessage):'Error: secret.txt has not been read yet. Use "cat secret.txt" first.':rot13(t):'Usage: rot13 <text> or rot13 <filename>\nExample: rot13 "Hello World" or rot13 secret.txt',clear:()=>(output.innerHTML="",""),exit:()=>(output.innerHTML+="\nLogging out...\n\n",setTimeout((()=>{location.reload()}),1e3),"")};function autocomplete(){const t=commandInput.value,e=t.split(" ");if(1===e.length){const n=availableCommands.filter((t=>t.startsWith(e[0])));1===n.length?commandInput.value=n[0]+" ":n.length>1&&(output.innerHTML+=`${promptSpan.innerHTML}${t}\n${n.join("  ")}\n`,terminalContent.scrollTop=terminalContent.scrollHeight)}else if(e.length>=2){const n=e[e.length-1];let o=[];if(n.includes("/")){const t=n.split("/"),e=t.pop(),r=t.join("/")||"/";if(fileSystem[r]){o=fileSystem[r].filter((t=>t.startsWith(e))).map((t=>"/"===r?"/"+t:r+"/"+t))}Object.keys(fileContents).forEach((t=>{if(t.startsWith(r+"/")){const n=t.substring(r.length+1);!n.includes("/")&&n.startsWith(e)&&o.push(t)}}))}else{const t=[...availableFiles,...availableDirs];o=t.filter((t=>t.startsWith(n)))}if(o=[...new Set(o)],1===o.length)e[e.length-1]=o[0],commandInput.value=e.join(" ");else if(o.length>1){const e=o.map((t=>{if(t.includes("/")){const e=t.split("/");return e[e.length-1]}return t}));output.innerHTML+=`${promptSpan.innerHTML}${t}\n${e.join("  ")}\n`,terminalContent.scrollTop=terminalContent.scrollHeight}}}function executeCommand(t){const e=t.split(" "),n=e[0].toLowerCase(),o=e.slice(1).join(" ");if(commands[n]){const t=commands[n](o);t&&(output.innerHTML+=t)}else output.innerHTML+=`bash: ${n}: command not found`;output.innerHTML+="\n",terminalContent.scrollTop=terminalContent.scrollHeight}commandInput.addEventListener("keydown",(t=>{if("Tab"===t.key)t.preventDefault(),autocomplete();else if("Enter"===t.key){const t=commandInput.value.trim();output.innerHTML+=`${promptSpan.innerHTML}${t}\n`,t&&(commandHistory.push(t),historyIndex=commandHistory.length,executeCommand(t)),commandInput.value="",terminalContent.scrollTop=terminalContent.scrollHeight}else"ArrowUp"===t.key?(t.preventDefault(),historyIndex>0&&(historyIndex--,commandInput.value=commandHistory[historyIndex])):"ArrowDown"===t.key&&(t.preventDefault(),historyIndex<commandHistory.length-1?(historyIndex++,commandInput.value=commandHistory[historyIndex]):(historyIndex=commandHistory.length,commandInput.value=""))})),document.addEventListener("click",(()=>{"block"===terminalContent.style.display&&commandInput.focus()}));
+</script>
 </body>
-</html>
