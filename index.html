@@ -56,7 +56,7 @@
         #terminal {
             display: none;
             background-color: rgba(0, 0, 0, 0.85);
-            padding: 20px;
+            padding: 0px 20px 20px 20px;
             width: 90%;
             max-width: 800px;
             min-height: 500px;
@@ -65,6 +65,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            overflow: hidden;
         }
         
         #login-box {
@@ -72,14 +73,29 @@
             white-space: pre;
             background-color: transparent;
         }
-        
-        #terminal-content {
-            display: none;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            max-height: 450px;
-            overflow-y: auto;
+
+        #output {
+            margin: 0;
+            padding: 0;
+            white-space: pre-wrap; /* preserve newlines without extra spacing */
+            line-height: 1.2;
         }
+
+        #output:empty {
+            line-height: 0;
+            height: 0;
+        }
+        
+#terminal-content {
+    display: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 450px;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    padding-top: 0; /* ensure content starts at the very top */
+}
         
         input {
             background-color: #000;
@@ -105,9 +121,11 @@
             width: calc(100% - 50px);
         }
         
-        .command-line {
-            display: flex;
-        }
+.command-line {
+    display: flex;
+    line-height: 1.2;
+    font-size: 16px;
+}
         
         .prompt {
             color: #0f0;
@@ -132,6 +150,7 @@
         .prompt-symbol {
             color: #0f0;
         }
+
     </style>
 </head>
 <body>
@@ -202,7 +221,531 @@ password: <input type="password" id="password" maxlength="20">
                 drops[x] = 1;
         });
     </script>
-<script>
-const startButton=document.getElementById("start-button"),terminal=document.getElementById("terminal"),loginBox=document.getElementById("login-box"),terminalContent=document.getElementById("terminal-content"),usernameInput=document.getElementById("username"),passwordInput=document.getElementById("password"),commandInput=document.getElementById("command-input"),output=document.getElementById("output"),promptSpan=document.getElementById("prompt");let currentUser="user",currentDir="~",commandHistory=[],historyIndex=-1,secretMessage="";const fileSystem={"/":["bin","etc","usr","home","var","tmp"],"/bin":["cat","clear","date","echo","exit","fortune","ls","pwd","rot13","uname","uptime","whoami","cd"],"/etc":["passwd","hosts","hostname","fstab","resolv.conf"],"/usr":["bin","lib","share","local"],"/usr/bin":["vim","gcc","python","perl","ruby"],"/home":["root"],"/home/root":["Desktop","Documents","Downloads",".bash_logout",".bashrc",".profile","secret.txt"],"/var":["log","tmp","cache"],"/tmp":[]},fileContents={"/etc/passwd":"root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin\nsys:x:3:3:sys:/dev:/usr/sbin/nologin\nsync:x:4:65534:sync:/bin:/bin/sync\ngames:x:5:60:games:/usr/games:/usr/sbin/nologin\nman:x:6:12:man:/var/cache/man:/usr/sbin/nologin\nlp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin\nmail:x:8:8:mail:/var/mail:/usr/sbin/nologin\nnews:x:9:9:news:/var/spool/news:/usr/sbin/nologin\nwww-data:x:33:33:www-data:/var/www:/usr/sbin/nologin\nbackup:x:34:34:backup:/var/backups:/usr/sbin/nologin\nnobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin","/etc/hosts":"127.0.0.1       localhost\n127.0.1.1       bradster\n::1             localhost ip6-localhost ip6-loopback\nff02::1         ip6-allnodes\nff02::2         ip6-allrouters","/etc/hostname":"bradster","secret.txt":"encrypted"},availableCommands=["cat","clear","date","echo","exit","fortune","ls","pwd","rot13","uname","uptime","whoami","cd"],availableFiles=["secret.txt",".bash_logout",".bashrc",".profile","passwd","hosts","hostname"],availableDirs=["/bin","/etc","/usr","/home","/var","/tmp","Desktop","Documents","Downloads"];function login(){if("root"!==usernameInput.value.trim().toLowerCase())return passwordInput.value="",usernameInput.value="",void usernameInput.focus();currentUser="root",loginBox.style.display="none",terminalContent.style.display="block",output.innerHTML=`Last login: ${(new Date).toString()}\nWelcome to Bradster UNIX System v2.1\n`,updatePrompt(),commandInput.focus()}function updatePrompt(){promptSpan.innerHTML=`<span class="prompt-user">${currentUser}</span><span class="prompt-at">@</span><span class="prompt-host">bradster</span>:<span class="prompt-dir">${currentDir}</span><span class="prompt-symbol">$ </span>`}function rot13(t){return t.replace(/[a-zA-Z]/g,(function(t){return String.fromCharCode((t<="Z"?90:122)>=(t=t.charCodeAt(0)+13)?t:t-26)}))}async function fetchAndDisplaySecret(){try{const t=Math.random().toString(36).substring(7),e=await fetch("https://corsproxy.io/?"+encodeURIComponent("https://api.quotable.io/random")+"&cb="+t,{cache:"no-store"});if(!e.ok)throw new Error("API request failed");const n=await e.json(),o=rot13(`"${n.content}" - ${n.author}`);secretMessage=o,output.innerHTML=output.innerHTML.replace("Loading secret message...",o)}catch(t){const e=['"The only way to do great work is to love what you do." - Steve Jobs','"Innovation distinguishes between a leader and a follower." - Steve Jobs','"Be yourself; everyone else is already taken." - Oscar Wilde','"Two things are infinite: the universe and human stupidity." - Albert Einstein','"In the middle of difficulty lies opportunity." - Albert Einstein','"The future belongs to those who believe in the beauty of their dreams." - Eleanor Roosevelt','"It is during our darkest moments that we must focus to see the light." - Aristotle','"Life is what happens when you are busy making other plans." - John Lennon','"The way to get started is to quit talking and begin doing." - Walt Disney','"Do not go where the path may lead, go instead where there is no path." - Ralph Waldo Emerson'],n=rot13(e[Math.floor(Math.random()*e.length)]);secretMessage=n,output.innerHTML=output.innerHTML.replace("Loading secret message...",n)}}startButton.addEventListener("click",(()=>{startButton.style.display="none",terminal.style.display="block",usernameInput.focus()})),setTimeout((()=>{startButton.style.display="block"}),5e3),usernameInput.addEventListener("keydown",(t=>{"Enter"===t.key&&passwordInput.focus()})),passwordInput.addEventListener("keydown",(t=>{"Enter"===t.key&&login()}));const commands={ls:t=>{const e=t.trim()||currentDir;let n=e;if("~"===e?n="/home/root":"."===e?n="~"===currentDir?"/home/root":currentDir:e.startsWith("/")||(n="~"===currentDir?"/home/root":currentDir),fileSystem[n]){const t=fileSystem[n];let e="total "+4*t.length+"\n";return t.forEach((t=>{const o=void 0!==fileSystem[n+"/"+t],r=o?"drwxr-xr-x":"-rw-r--r--",s=o?"4096":Math.floor(5e3*Math.random())+100;e+=`${r}  2 ${currentUser} users ${s.toString().padStart(4)} Dec 24 10:30 ${t}\n`})),e.trimEnd()}return`ls: cannot access '${t}': No such file or directory`},cd:t=>{if(!t||""===t.trim()||"~"===t.trim())return currentDir="~",updatePrompt(),"";let e=t.trim();if(".."===e){if("~"===currentDir)currentDir="/home";else{if("/"===currentDir)return"";{const t=currentDir.split("/").filter((t=>t));t.pop(),currentDir=0===t.length?"/":"/"+t.join("/")}}return updatePrompt(),""}if(e.startsWith("/")){if(fileSystem[e])return currentDir=e,updatePrompt(),""}else{const t="~"===currentDir?"/home/root":currentDir,n="/"===t?"/"+e:t+"/"+e;if(fileSystem[n])return currentDir=n,updatePrompt(),""}return`bash: cd: ${t}: No such file or directory`},pwd:()=>"~"===currentDir?"/home/root":currentDir,whoami:()=>currentUser,date:()=>(new Date).toString(),uptime:()=>{const t=Math.floor(100*Math.random())+1,e=Math.floor(24*Math.random()),n=Math.floor(60*Math.random());return` ${(new Date).toTimeString().split(" ")[0]} up ${t} days, ${e}:${n}, 3 users, load average: 0.${Math.floor(90*Math.random())}, 0.${Math.floor(90*Math.random())}, 0.${Math.floor(90*Math.random())}`},uname:()=>"Linux bradster 5.15.0-92-generic #102-Ubuntu SMP x86_64 GNU/Linux",cat:t=>{if(!t||""===t.trim())return"cat: missing file operand\nTry 'cat --help' for more information.";let e=t.trim();if("secret.txt"===e||"/home/root/secret.txt"===e)return secretMessage="",setTimeout((()=>fetchAndDisplaySecret()),100),"Loading secret message...";if(fileContents[e])return fileContents[e];if(!e.startsWith("/")){const t=("~"===currentDir?"/home/root":currentDir)+"/"+e;if(fileContents[t])return fileContents[t];if(fileContents[e])return fileContents[e]}return`cat: ${t}: No such file or directory`},echo:t=>t||"",fortune:()=>{const t=["A computer program does what you tell it to do, not what you want it to do.","The best way to predict the future is to implement it.","There are only 10 types of people: those who understand binary and those who don't.","To err is human, to really foul up requires the root password.","Unix is user-friendly. It's just very selective about who its friends are.","I'd explain it to you, but your kernel wouldn't understand.","Real programmers count from 0."];return t[Math.floor(Math.random()*t.length)]},rot13:t=>t&&""!==t.trim()?"secret.txt"===t.trim()?secretMessage?rot13(secretMessage):'Error: secret.txt has not been read yet. Use "cat secret.txt" first.':rot13(t):'Usage: rot13 <text> or rot13 <filename>\nExample: rot13 "Hello World" or rot13 secret.txt',clear:()=>(output.innerHTML="",""),exit:()=>(output.innerHTML+="\nLogging out...\n\n",setTimeout((()=>{location.reload()}),1e3),"")};function autocomplete(){const t=commandInput.value,e=t.split(" ");if(1===e.length){const n=availableCommands.filter((t=>t.startsWith(e[0])));1===n.length?commandInput.value=n[0]+" ":n.length>1&&(output.innerHTML+=`${promptSpan.innerHTML}${t}\n${n.join("  ")}\n`,terminalContent.scrollTop=terminalContent.scrollHeight)}else if(e.length>=2){const n=e[e.length-1];let o=[];if(n.includes("/")){const t=n.split("/"),e=t.pop(),r=t.join("/")||"/";if(fileSystem[r]){o=fileSystem[r].filter((t=>t.startsWith(e))).map((t=>"/"===r?"/"+t:r+"/"+t))}Object.keys(fileContents).forEach((t=>{if(t.startsWith(r+"/")){const n=t.substring(r.length+1);!n.includes("/")&&n.startsWith(e)&&o.push(t)}}))}else{const t=[...availableFiles,...availableDirs];o=t.filter((t=>t.startsWith(n)))}if(o=[...new Set(o)],1===o.length)e[e.length-1]=o[0],commandInput.value=e.join(" ");else if(o.length>1){const e=o.map((t=>{if(t.includes("/")){const e=t.split("/");return e[e.length-1]}return t}));output.innerHTML+=`${promptSpan.innerHTML}${t}\n${e.join("  ")}\n`,terminalContent.scrollTop=terminalContent.scrollHeight}}}function executeCommand(t){const e=t.split(" "),n=e[0].toLowerCase(),o=e.slice(1).join(" ");if(commands[n]){const t=commands[n](o);t&&(output.innerHTML+=t)}else output.innerHTML+=`bash: ${n}: command not found`;output.innerHTML+="\n",terminalContent.scrollTop=terminalContent.scrollHeight}commandInput.addEventListener("keydown",(t=>{if("Tab"===t.key)t.preventDefault(),autocomplete();else if("Enter"===t.key){const t=commandInput.value.trim();output.innerHTML+=`${promptSpan.innerHTML}${t}\n`,t&&(commandHistory.push(t),historyIndex=commandHistory.length,executeCommand(t)),commandInput.value="",terminalContent.scrollTop=terminalContent.scrollHeight}else"ArrowUp"===t.key?(t.preventDefault(),historyIndex>0&&(historyIndex--,commandInput.value=commandHistory[historyIndex])):"ArrowDown"===t.key&&(t.preventDefault(),historyIndex<commandHistory.length-1?(historyIndex++,commandInput.value=commandHistory[historyIndex]):(historyIndex=commandHistory.length,commandInput.value=""))})),document.addEventListener("click",(()=>{"block"===terminalContent.style.display&&commandInput.focus()}));
-</script>
+
+    <!-- Terminal Logic -->
+    <script>
+        const startButton = document.getElementById('start-button');
+        const terminal = document.getElementById('terminal');
+        const loginBox = document.getElementById('login-box');
+        const terminalContent = document.getElementById('terminal-content');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const commandInput = document.getElementById('command-input');
+        const output = document.getElementById('output');
+        const promptSpan = document.getElementById('prompt');
+        
+        let currentUser = 'user';
+        let currentDir = '~';
+        let commandHistory = [];
+        let historyIndex = -1;
+        let secretMessage = ''; // Store the secret message for rot13 file decoding
+        let justCleared = false; /* flag to avoid auto-scrolling after clear */
+        
+        // File system structure
+        const fileSystem = {
+            '/': ['bin', 'etc', 'usr', 'home', 'var', 'tmp'],
+            '/bin': ['cat','more', 'clear', 'date', 'echo', 'exit', 'fortune', 'ls', 'pwd', 'rot13', 'uname', 'uptime', 'whoami', 'cd'],
+            '/etc': ['passwd', 'hosts', 'hostname', 'fstab', 'resolv.conf'],
+            '/usr': ['bin', 'lib', 'share', 'local'],
+            '/usr/bin': ['vim', 'gcc', 'python', 'perl', 'ruby'],
+            '/home': ['root'],
+            '/home/root': ['TODO.txt', 'README.txt','secret.txt'],
+            '/var': ['log', 'tmp', 'cache'],
+            '/tmp': []
+        };
+        
+        // File contents
+        const fileContents = {
+            '/etc/passwd': `root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin`,
+            '/etc/hosts': `127.0.0.1       localhost
+127.0.1.1       bradster
+::1             localhost ip6-localhost ip6-loopback
+ff02::1         ip6-allnodes
+ff02::2         ip6-allrouters`,
+'TODO.txt': `My To Do List...
+
+1) finish the site
+2) push to github
+3) sleep`,
+'README.txt': `Merry Christmas and Happy New Year!!`,
+            '/etc/hostname': 'bradster',
+            'secret.txt': 'encrypted' // Special marker for dynamic content
+        };
+        
+        // Autocomplete data
+        const availableCommands = ['cat', 'more', 'clear', 'date', 'echo', 'exit', 'fortune', 'ls', 'pwd', 'rot13', 'uname', 'uptime', 'whoami', 'cd'];
+        const availableFiles = ['secret.txt', 'TODO.txt', 'README.txt',  'passwd', 'hosts', 'hostname'];
+        const availableDirs = ['/bin', '/etc', '/usr', '/home', '/var', '/tmp', 'Desktop', 'Documents', 'Downloads'];
+        
+        // Handle start button click
+        startButton.addEventListener('click', () => {
+            startButton.style.display = 'none';
+            terminal.style.display = 'block';
+            usernameInput.focus();
+        });
+        
+        // Show start button after 5 seconds
+        setTimeout(() => {
+            startButton.style.display = 'block';
+        }, 5000);
+        
+        // Focus username on load - removed, now triggered by button click
+        // usernameInput.focus();
+        
+        // Handle tab between username and password
+        usernameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                passwordInput.focus();
+            }
+        });
+        
+        // Handle login
+        passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+        
+        function login() {
+            const username = usernameInput.value.trim();
+            
+            if (username.toLowerCase() !== 'root') {
+                passwordInput.value = '';
+                usernameInput.value = '';
+                usernameInput.focus();
+                return;
+            }
+            
+            currentUser = 'root';
+            
+            loginBox.style.display = 'none';
+            terminalContent.style.display = 'block';
+            
+            // Use textContent to avoid accidental HTML/indentation creating blank lines
+            output.textContent = `Last login: ${new Date().toString()}\nWelcome to UNIX System v2.1\n`;
+            // ensure the visible view is at the top of the terminal content
+            terminalContent.scrollTop = 0;
+            updatePrompt();
+            commandInput.focus();
+        }
+        
+        function updatePrompt() {
+            promptSpan.innerHTML = `<span class="prompt-user">${currentUser}</span><span class="prompt-at">@</span><span class="prompt-host">bradster</span>:<span class="prompt-dir">${currentDir}</span><span class="prompt-symbol">$ </span>`;
+        }
+        
+        // ROT13 cipher function
+        function rot13(str) {
+            return str.replace(/[a-zA-Z]/g, function(c) {
+                return String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26);
+            });
+        }
+        
+        // Fetch quote and display ROT13 version
+        async function fetchAndDisplaySecret() {
+            try {
+                // Try using a CORS proxy
+                const cacheBuster = Math.random().toString(36).substring(7);
+                const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://api.quotable.io/random') + '&cb=' + cacheBuster, {
+                    cache: 'no-store'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+                
+                const data = await response.json();
+                const quote = `"${data.content}" - ${data.author}`;
+                const encrypted = rot13(quote);
+                
+                // Store for rot13 command
+                secretMessage = encrypted;
+                
+                // Find and replace the "Loading..." message
+                output.innerHTML = output.innerHTML.replace('Loading secret message...', encrypted);
+            } catch (error) {
+                // If API fails, generate a random quote from a local list
+                const fallbacks = [
+                    '"The only way to do great work is to love what you do." - Steve Jobs',
+                    '"Innovation distinguishes between a leader and a follower." - Steve Jobs',
+                    '"Be yourself; everyone else is already taken." - Oscar Wilde',
+                    '"Two things are infinite: the universe and human stupidity." - Albert Einstein',
+                    '"In the middle of difficulty lies opportunity." - Albert Einstein',
+                    '"The future belongs to those who believe in the beauty of their dreams." - Eleanor Roosevelt',
+                    '"It is during our darkest moments that we must focus to see the light." - Aristotle',
+                    '"Life is what happens when you are busy making other plans." - John Lennon',
+                    '"The way to get started is to quit talking and begin doing." - Walt Disney',
+                    '"Do not go where the path may lead, go instead where there is no path." - Ralph Waldo Emerson'
+                ];
+                const fallbackQuote = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                const encrypted = rot13(fallbackQuote);
+                
+                // Store for rot13 command
+                secretMessage = encrypted;
+                
+                output.innerHTML = output.innerHTML.replace('Loading secret message...', encrypted);
+            }
+        }
+        
+        // Command responses
+        const commands = {
+            ls: (args) => {
+                const path = args.trim() || currentDir;
+                let displayPath = path;
+                
+                // Normalize path
+                if (path === '~') displayPath = '/home/root';
+                else if (path === '.') displayPath = currentDir === '~' ? '/home/root' : currentDir;
+                else if (!path.startsWith('/')) displayPath = currentDir === '~' ? '/home/root' : currentDir;
+                
+                // Check if path exists in filesystem
+                if (fileSystem[displayPath]) {
+                    const items = fileSystem[displayPath];
+                    let output = 'total ' + (items.length * 4) + '\n';
+                    items.forEach(item => {
+                        // Check if it's a directory
+                        const fullPath = displayPath + '/' + item;
+                        const isDir = fileSystem[fullPath] !== undefined;
+                        const perms = isDir ? 'drwxr-xr-x' : '-rw-r--r--';
+                        const size = isDir ? '4096' : Math.floor(Math.random() * 5000) + 100;
+                        output += `${perms}  2 ${currentUser} users ${size.toString().padStart(4)} Dec 24 10:30 ${item}\n`;
+                    });
+                    return output.trimEnd();
+                }
+                
+                return `ls: cannot access '${args}': No such file or directory`;
+            },
+            
+            cd: (args) => {
+                if (!args || args.trim() === '' || args.trim() === '~') {
+                    currentDir = '~';
+                    updatePrompt();
+                    return '';
+                }
+                
+                let newPath = args.trim();
+                
+                // Handle relative paths
+                if (newPath === '..') {
+                    if (currentDir === '~') {
+                        currentDir = '/home';
+                    } else if (currentDir === '/') {
+                        return '';
+                    } else {
+                        const parts = currentDir.split('/').filter(p => p);
+                        parts.pop();
+                        currentDir = parts.length === 0 ? '/' : '/' + parts.join('/');
+                    }
+                    updatePrompt();
+                    return '';
+                }
+                
+                // Handle absolute paths
+                if (newPath.startsWith('/')) {
+                    if (fileSystem[newPath]) {
+                        currentDir = newPath;
+                        updatePrompt();
+                        return '';
+                    }
+                } else {
+                    // Relative path from current directory
+                    const base = currentDir === '~' ? '/home/root' : currentDir;
+                    const fullPath = base === '/' ? '/' + newPath : base + '/' + newPath;
+                    if (fileSystem[fullPath]) {
+                        currentDir = fullPath;
+                        updatePrompt();
+                        return '';
+                    }
+                }
+                
+                return `bash: cd: ${args}: No such file or directory`;
+            },
+            pwd: () => currentDir === '~' ? '/home/root' : currentDir,
+            
+            whoami: () => currentUser,
+            
+            date: () => new Date().toString(),
+            
+            uptime: () => {
+                const days = Math.floor(Math.random() * 100) + 1;
+                const hours = Math.floor(Math.random() * 24);
+                const mins = Math.floor(Math.random() * 60);
+                return ` ${new Date().toTimeString().split(' ')[0]} up ${days} days, ${hours}:${mins}, 3 users, load average: 0.${Math.floor(Math.random() * 90)}, 0.${Math.floor(Math.random() * 90)}, 0.${Math.floor(Math.random() * 90)}`;
+            },
+            
+            uname: () => `Linux bradster 5.15.0-92-generic #102-Ubuntu SMP x86_64 GNU/Linux`,
+            
+            cat: (args) => {
+                if (!args || args.trim() === '') {
+                    return 'cat: missing file operand\nTry \'cat --help\' for more information.';
+                }
+                
+                let filename = args.trim();
+                
+                // Check for special files
+                if (filename === 'secret.txt' || filename === '/home/root/secret.txt') {
+                    secretMessage = '';
+                    setTimeout(() => fetchAndDisplaySecret(), 100);
+                    return 'Loading secret message...';
+                }
+                
+                // Try absolute path first
+                if (fileContents[filename]) {
+                    return fileContents[filename];
+                }
+                
+                // If relative path, try current directory
+                if (!filename.startsWith('/')) {
+                    const currentPath = currentDir === '~' ? '/home/root' : currentDir;
+                    const fullPath = currentPath + '/' + filename;
+                    if (fileContents[fullPath]) {
+                        return fileContents[fullPath];
+                    }
+                    
+                    // Also try just the filename for common files
+                    if (fileContents[filename]) {
+                        return fileContents[filename];
+                    }
+                }
+                
+                return `cat: ${args}: No such file or directory`;
+            },
+            
+     more: (args) => {
+                if (!args || args.trim() === '') {
+                    return 'more: missing file operand\nTry \'more --help\' for more information.';
+                }
+                
+                let filename = args.trim();
+                
+                // Check for special files
+                if (filename === 'secret.txt' || filename === '/home/root/secret.txt') {
+                    secretMessage = '';
+                    setTimeout(() => fetchAndDisplaySecret(), 100);
+                    return 'Loading secret message...';
+                }
+                
+                // Try absolute path first
+                if (fileContents[filename]) {
+                    return fileContents[filename];
+                }
+                
+                // If relative path, try current directory
+                if (!filename.startsWith('/')) {
+                    const currentPath = currentDir === '~' ? '/home/root' : currentDir;
+                    const fullPath = currentPath + '/' + filename;
+                    if (fileContents[fullPath]) {
+                        return fileContents[fullPath];
+                    }
+                    
+                    // Also try just the filename for common files
+                    if (fileContents[filename]) {
+                        return fileContents[filename];
+                    }
+                }
+                
+                return `more: ${args}: No such file or directory`;
+            },
+
+            echo: (args) => args || '',
+            
+            fortune: () => {
+                const fortunes = [
+                    'A computer program does what you tell it to do, not what you want it to do.',
+                    'The best way to predict the future is to implement it.',
+                    'There are only 10 types of people: those who understand binary and those who don\'t.',
+                    'To err is human, to really foul up requires the root password.',
+                    'Unix is user-friendly. It\'s just very selective about who its friends are.',
+                    'I\'d explain it to you, but your kernel wouldn\'t understand.',
+                    'Real programmers count from 0.'
+                ];
+                return fortunes[Math.floor(Math.random() * fortunes.length)];
+            },
+            
+            rot13: (args) => {
+                if (!args || args.trim() === '') {
+                    return 'Usage: rot13 <text> or rot13 <filename>\nExample: rot13 "Hello World" or rot13 secret.txt';
+                }
+                
+                // Check if it's a file
+                if (args.trim() === 'secret.txt') {
+                    if (secretMessage) {
+                        return rot13(secretMessage);
+                    } else {
+                        return 'Error: secret.txt has not been read yet. Use "cat secret.txt" first.';
+                    }
+                }
+                
+                return rot13(args);
+            },
+            
+clear: () => {
+    output.innerHTML = '';
+    // Reset scroll to top so prompt sits at the top line
+    terminalContent.scrollTop = 0;
+    justCleared = true; /* inform handlers not to override scrollTop */
+    // Ensure input keeps focus
+    commandInput.focus();
+    return null;
+},
+		    
+            exit: () => {
+                output.innerHTML += '\nLogging out...\n\n';
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+                return '';
+            }
+        };
+        
+        // Handle command input
+        commandInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                autocomplete();
+            } else if (e.key === 'Enter') {
+                const command = commandInput.value.trim();
+                
+                // Show prompt on new line even if empty command - preserve HTML colors
+                output.innerHTML += `${promptSpan.innerHTML}${command}\n`;
+                
+                if (command) {
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                    executeCommand(command);
+                }
+                
+                commandInput.value = '';
+                // Auto-scroll to bottom unless a clear just happened
+                if (justCleared) {
+                    terminalContent.scrollTop = 0;
+                    justCleared = false;
+                } else {
+                    terminalContent.scrollTop = terminalContent.scrollHeight;
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    commandInput.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    commandInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    commandInput.value = '';
+                }
+            }
+        });
+        
+        // Autocomplete function
+        function autocomplete() {
+            const input = commandInput.value;
+            const parts = input.split(' ');
+            
+            if (parts.length === 1) {
+                // Autocomplete command
+                const matches = availableCommands.filter(cmd => cmd.startsWith(parts[0]));
+                if (matches.length === 1) {
+                    commandInput.value = matches[0] + ' ';
+                } else if (matches.length > 1) {
+                    output.innerHTML += `${promptSpan.innerHTML}${input}\n${matches.join('  ')}\n`;
+                    terminalContent.scrollTop = terminalContent.scrollHeight;
+                }
+            } else if (parts.length >= 2) {
+                // Autocomplete filename/directory
+                const lastPart = parts[parts.length - 1];
+                let matches = [];
+                
+                // Check if it's a path with directory separator
+                if (lastPart.includes('/')) {
+                    const pathParts = lastPart.split('/');
+                    const incomplete = pathParts.pop();
+                    const dirPath = pathParts.join('/') || '/';
+                    
+                    // Get files/dirs from that directory
+                    if (fileSystem[dirPath]) {
+                        const items = fileSystem[dirPath];
+                        matches = items.filter(item => item.startsWith(incomplete)).map(item => {
+                            return dirPath === '/' ? '/' + item : dirPath + '/' + item;
+                        });
+                    }
+                    
+                    // Also check file contents for that directory
+                    Object.keys(fileContents).forEach(path => {
+                        if (path.startsWith(dirPath + '/')) {
+                            const filename = path.substring(dirPath.length + 1);
+                            if (!filename.includes('/') && filename.startsWith(incomplete)) {
+                                matches.push(path);
+                            }
+                        }
+                    });
+                } else {
+                    // Simple filename/directory autocomplete
+                    const allOptions = [...availableFiles, ...availableDirs];
+                    matches = allOptions.filter(item => item.startsWith(lastPart));
+                }
+                
+                // Remove duplicates
+                matches = [...new Set(matches)];
+                
+                if (matches.length === 1) {
+                    parts[parts.length - 1] = matches[0];
+                    commandInput.value = parts.join(' ');
+                } else if (matches.length > 1) {
+                    // Show just the matching portion for display
+                    const displayMatches = matches.map(m => {
+                        if (m.includes('/')) {
+                            const parts = m.split('/');
+                            return parts[parts.length - 1];
+                        }
+                        return m;
+                    });
+                    output.innerHTML += `${promptSpan.innerHTML}${input}\n${displayMatches.join('  ')}\n`;
+                    terminalContent.scrollTop = terminalContent.scrollHeight;
+                }
+            }
+        }
+        
+function executeCommand(input) {
+    const parts = input.split(' ');
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1).join(' ');
+    
+    if (commands[cmd]) {
+        const result = commands[cmd](args);
+        // If the command handler returns null we treat that as "handled with its own output/behavior"
+        if (result !== null && result !== undefined) {
+            // append even empty string results (''), then put a newline after them
+            output.innerHTML += result;
+            output.innerHTML += '\n';
+        }
+    } else {
+        output.innerHTML += `bash: ${cmd}: command not found\n`;
+    }
+}
+           
+        
+        // Keep focus on command input
+        document.addEventListener('click', () => {
+            if (terminalContent.style.display === 'block') {
+                commandInput.focus();
+            }
+        });
+    </script>
 </body>
+</html>
