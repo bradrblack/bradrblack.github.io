@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bradster Terminal</title>
+    <title>Bradster</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <style>
@@ -46,9 +46,32 @@
             color: #0f0;
             transition: all 0.3s;
             display: none;
+            position: absolute;
+  margin-left: auto;
+  margin-right: auto;
         }
         
         #start-button:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            transform: scale(1.05);
+        }
+        
+        #pg-button {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 2px solid #0f0;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #0f0;
+            transition: all 0.3s;
+            display: none;
+            position: absolute;
+            margin: 80px;
+	    bottom: 0;
+            right: 0;
+        }
+        
+        #pg-button:hover {
             background-color: rgba(0, 255, 0, 0.1);
             transform: scale(1.05);
         }
@@ -160,6 +183,7 @@
     
     <div id="terminal-wrapper">
         <div id="start-button">?</div>
+        <div id="pg-button">pixel-gadget</div>
         
         <div id="terminal">
             <div id="login-box">username: <input type="text" id="username" maxlength="20">
