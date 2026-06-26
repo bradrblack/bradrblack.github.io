@@ -1,14 +1,371 @@
-<div class="testimonial">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeWorry - You Live, We Worry.</title>
 
-    <blockquote>
-        "I used to spend hours worrying about the economy,
-        my retirement savings, and whether that noise in my
-        basement meant something terrible. Now I spend that
-        time gardening. WeWorry handles the rest."
-    </blockquote>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <cite>
-        — Michael R., Platinum Member since 2024
-    </cite>
+<style>
+:root{
+    --bg:#f6f9fc;
+    --card:#ffffff;
+    --text:#243447;
+    --muted:#667788;
+    --accent:#5f7fa8;
+    --bronze:#b9835a;
+    --gold:#d4af37;
+    --platinum:#b8c7d9;
+    --border:#dfe7ef;
+}
+
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+.hero{
+    text-align:center;
+    padding:80px 20px 40px;
+}
+
+.logo{
+    font-family:'Playfair Display',serif;
+    font-size:4rem;
+    margin:0;
+}
+
+.tagline{
+    font-size:1.4rem;
+    color:var(--muted);
+    margin-bottom:30px;
+}
+
+.counter{
+    margin-top:40px;
+    background:white;
+    display:inline-block;
+    padding:20px 35px;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+}
+
+.counter-number{
+    font-size:2.5rem;
+    font-weight:700;
+    color:var(--accent);
+}
+
+.testimonial{
+    max-width:700px;
+    margin:40px auto 0;
+    padding:25px;
+    background:white;
+    border-radius:16px;
+    border:1px solid var(--border);
+}
+
+.testimonial blockquote{
+    margin:0;
+    font-style:italic;
+}
+
+.testimonial cite{
+    display:block;
+    margin-top:10px;
+    color:var(--muted);
+    font-style:normal;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:40px;
+    font-family:'Playfair Display',serif;
+}
+
+.tiers{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:var(--card);
+    border-radius:16px;
+    padding:25px;
+    border:1px solid var(--border);
+    box-shadow:0 5px 20px rgba(0,0,0,.04);
+}
+
+.card h3{margin-top:0;}
+
+.price{
+    font-size:2rem;
+    font-weight:bold;
+}
+
+.bronze{border-top:6px solid var(--bronze);}
+.gold{border-top:6px solid var(--gold);}
+.platinum{border-top:6px solid var(--platinum);}
+
+button{
+    background:var(--accent);
+    color:white;
+    border:none;
+    border-radius:8px;
+    padding:12px 20px;
+    cursor:pointer;
+}
+
+button:hover{opacity:.9;}
+
+form{
+    display:grid;
+    gap:15px;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid var(--border);
+}
+
+.hidden{display:none;}
+
+.recommendations{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    margin-top:20px;
+    border:1px solid var(--border);
+}
+
+footer{
+    text-align:center;
+    color:var(--muted);
+    padding:50px;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+.modal-content{
+    background:white;
+    max-width:600px;
+    padding:30px;
+    border-radius:16px;
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="container">
+
+        <h1 class="logo">WeWorry</h1>
+        <div class="tagline">You Live, We Worry.</div>
+
+        <p>
+            Tell us your concerns. We assume responsibility for worrying about them.
+        </p>
+
+        <div class="counter">
+            <div class="counter-number" id="worryCount">12,482,113</div>
+            <div>Active Worries Managed</div>
+        </div>
+
+        <!-- TESTIMONIAL -->
+        <div class="testimonial">
+            <blockquote>
+                "I used to lie awake thinking about everything.
+                Now I sleep soundly while WeWorry handles it."
+            </blockquote>
+            <cite>— Michael R., Platinum Member</cite>
+        </div>
+
+    </div>
+</section>
+
+<section class="container">
+
+<h2 class="section-title">Choose Your Plan</h2>
+
+<div class="tiers">
+
+<div class="card bronze">
+<h3>Bronze</h3>
+<div class="price">$9/mo</div>
+<p>Everyday concerns</p>
+</div>
+
+<div class="card gold">
+<h3>Gold</h3>
+<div class="price">$29/mo</div>
+<p>Life-level concerns</p>
+</div>
+
+<div class="card platinum">
+<h3>Platinum</h3>
+<div class="price">$99/mo</div>
+<p>Existential concerns</p>
+</div>
 
 </div>
+
+</section>
+
+<section class="container">
+
+<h2 class="section-title">Start Offloading Your Worries</h2>
+
+<form id="signupForm">
+
+<input type="text" placeholder="Name" required>
+<input type="email" placeholder="Email" required>
+
+<select id="tier">
+<option>Bronze</option>
+<option>Gold</option>
+<option>Platinum</option>
+</select>
+
+<textarea id="worryText" rows="6" placeholder="Describe your worries..." required></textarea>
+
+<button type="submit">Continue</button>
+
+</form>
+
+<div id="billing" class="hidden">
+<h3>Billing (Demo)</h3>
+
+<form id="billingForm">
+<input placeholder="Card Name">
+<input placeholder="Card Number">
+<input placeholder="Expiry">
+<input placeholder="CVV">
+<button type="submit">Submit</button>
+</form>
+</div>
+
+<div id="results" class="recommendations hidden">
+
+<h3>Concern Transfer Successful</h3>
+
+<p>
+Your worries have been assigned to WeWorry infrastructure.
+</p>
+
+<h4>Recommended Actions</h4>
+<div id="recommendationList"></div>
+
+<hr>
+
+<h4>Status</h4>
+<p>
+✔ Received<br>
+✔ Categorized<br>
+✔ Assigned<br>
+✔ Being worried about
+</p>
+
+<p>You may now stop worrying manually.</p>
+
+</div>
+
+</section>
+
+<footer>
+© 2026 WeWorry Inc.<br>
+Worrying so you don't have to.<br><br>
+
+<a href="#" onclick="showDisclaimer();return false;">Disclaimer</a>
+</footer>
+
+<!-- DISCLAIMER MODAL -->
+<div id="disclaimerModal" class="modal hidden">
+<div class="modal-content">
+<h3>Disclaimer</h3>
+
+<p>
+WeWorry does not guarantee reduced anxiety, improved outcomes, or actual metaphysical transfer of concern.
+</p>
+
+<p>
+Worrying may be performed by humans, algorithms, or automated systems.
+</p>
+
+<button onclick="hideDisclaimer()">Close</button>
+</div>
+</div>
+
+<script>
+let value = 12482113;
+setInterval(()=>{
+    value += Math.floor(Math.random()*15)+1;
+    document.getElementById('worryCount').textContent =
+    value.toLocaleString();
+},1200);
+
+document.getElementById('signupForm').addEventListener('submit',e=>{
+e.preventDefault();
+document.getElementById('billing').classList.remove('hidden');
+});
+
+document.getElementById('billingForm').addEventListener('submit',e=>{
+e.preventDefault();
+
+const worry = document.getElementById('worryText').value.toLowerCase();
+
+let recs = [
+"Reduce news consumption",
+"Take a walk",
+"Stop checking social media"
+];
+
+if(worry.includes("health") || worry.includes("death")){
+recs.push("Exercise regularly");
+recs.push("Get medical checkups");
+}
+
+if(worry.includes("money")){
+recs.push("Review spending");
+}
+
+document.getElementById('recommendationList').innerHTML =
+"<ul>" + recs.map(r=>"<li>"+r+"</li>").join("") + "</ul>";
+
+document.getElementById('results').classList.remove('hidden');
+});
+
+function showDisclaimer(){
+document.getElementById('disclaimerModal').classList.remove('hidden');
+}
+
+function hideDisclaimer(){
+document.getElementById('disclaimerModal').classList.add('hidden');
+}
+</script>
+
+</body>
+</html>
