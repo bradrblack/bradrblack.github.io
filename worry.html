@@ -175,6 +175,29 @@ footer{
     padding:30px;
     border-radius:16px;
 }
+    .disclaimer{
+    margin-top:20px;
+    padding:15px 20px;
+    max-width:700px;
+    margin-left:auto;
+    margin-right:auto;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    color:var(--muted);
+    text-align:left;
+}
+
+.disclaimer summary{
+    cursor:pointer;
+    font-weight:600;
+    color:var(--text);
+    list-style:none;
+}
+
+.disclaimer summary::-webkit-details-marker{
+    display:none;
+}
 </style>
 </head>
 
@@ -299,25 +322,25 @@ Your worries have been assigned to WeWorry infrastructure.
 © 2026 WeWorry Inc.<br>
 Worrying so you don't have to.<br><br>
 
-<a href="#" onclick="showDisclaimer();return false;">Disclaimer</a>
+<details class="disclaimer">
+    <summary>Disclaimer</summary>
+
+    <p>
+        WeWorry does not guarantee reduced anxiety, improved outcomes,
+        or actual transfer of concern.
+    </p>
+
+    <p>
+        All worrying services are simulated. No actual metaphysical
+        worry absorption is implied or provided.
+    </p>
+
+    <p>
+        Use of this service does not replace medical, financial,
+        legal, or existential advice.
+    </p>
+</details>
 </footer>
-
-<!-- DISCLAIMER MODAL -->
-<div id="disclaimerModal" class="modal hidden">
-<div class="modal-content">
-<h3>Disclaimer</h3>
-
-<p>
-WeWorry does not guarantee reduced anxiety, improved outcomes, or actual metaphysical transfer of concern.
-</p>
-
-<p>
-Worrying may be performed by humans, algorithms, or automated systems.
-</p>
-
-<button onclick="hideDisclaimer()">Close</button>
-</div>
-</div>
 
 <script>
 let value = 12482113;
