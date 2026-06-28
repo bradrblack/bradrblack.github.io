@@ -318,7 +318,13 @@
   }
   .step-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
   .step-dot.done { background: var(--green); }
-
+ 
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:40px 20px;
+}
+ 
   /* ── WORRY CATEGORIES ── */
   .worry-cats {
     display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
@@ -453,6 +459,7 @@
     <p class="hero-sub">Tell us what's keeping you up at night. We'll take it from here. Seriously — stop thinking about it. That's our job now.</p>
 
      <!-- TESTIMONIAL -->
+   <div class="container">
         <div class="testimonial">
             <blockquote>
                 "I used to lie awake thinking about everything.
@@ -460,7 +467,7 @@
             </blockquote>
             <cite>— Michael R., Platinum Member</cite>
         </div>
-  
+  </div>
       
     <div class="hero-btns">
       <a href="#" class="btn-primary" onclick="openModal('signup'); return false;">Offload Your Worries</a>
